@@ -47,7 +47,7 @@ export const orderReducer = (state = initialState, { type, payload }) => {
 
     case GET_USERS_NOTIFICATION_SUCCESS:
       return { ...state, notifications: payload, error: null, loading: false };
-  
+
     case CHECKOUT_PREVIEW_FAILURE:
     case CREATE_ORDER_FAILURE:
     case GET_USERS_ORDERS_FAILURE:
