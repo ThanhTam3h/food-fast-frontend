@@ -3,7 +3,7 @@ import CreateRestaurantForm from "../Admin/AddRestaurants/CreateRestaurantForm";
 import Checkout from "../customers/components/Checkout/Checkout";
 import LoginForm from "../customers/components/Login/Login";
 import Navbar from "../customers/components/Navbar/Navbar";
-import ProductDetail from "../customers/components/Product-detail/Product-detail";
+
 import RegistrationForm from "../customers/components/Register/Register";
 import Search from "../customers/components/Search/Search";
 import PasswordChangeSuccess from "../customers/pages/Auth/PasswordChangeSuccess";
@@ -14,6 +14,7 @@ import PaymentSuccess from "../customers/pages/PaymentSuccess/PaymentSuccess";
 import Profile from "../customers/pages/Profile/Profile";
 import Restaurant from "../customers/pages/Restaurant/Restaurant";
 import Verify from "../customers/components/Verify/Verify";
+import ProductDetail from "../customers/pages/Product-detail/Product-detail";
 
 const CustomerRoutes = () => {
   return (
@@ -30,21 +31,15 @@ const CustomerRoutes = () => {
 
         <Route exact path="/restaurant/:id" element={<Restaurant />} />
 
-        {/* <Route
-          exact
-          path="/restaurant"
-          element={<Restaurant />}
-        /> */}
-
         <Route
           exact
-          path="product-detail/:productId"
+          path="product-detail/:id"
           element={<ProductDetail />}
         />
 
         <Route exact path="checkout" element={<Checkout />} />
 
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart/:id" element={<Cart />} />
 
         <Route path="/payment/success/:id" element={<PaymentSuccess />} />
 

@@ -22,6 +22,7 @@ const cartReducer = (state = initialState, action) => {
       };
     case actionTypes.FIND_CART_SUCCESS:
     case actionTypes.CLEARE_CART_SUCCESS:
+    case actionTypes.GET_ALL_CART_ITEMS_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -46,23 +47,21 @@ const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        cartItems: state.cartItems.filter((item) =>
-          item.id !== action.payload
-        ),
+        cartItems: state.cartItems.filter((item) => item.id !== action.payload),
       };
     case actionTypes.FIND_CART_FAILURE:
     case actionTypes.UPDATE_CARTITEM_FAILURE:
     case actionTypes.REMOVE_CARTITEM_FAILURE:
-      // case actionTypes.GET_ALL_CART_ITEMS_FAILURE:
+    case actionTypes.GET_ALL_CART_ITEMS_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
 
-      case LOGOUT:
+    case LOGOUT:
       localStorage.removeItem("jwt");
-      return { ...state, cartItems:[],cart:null, success: "logout success" };
+      return { ...state, cartItems: [], cart: null, success: "logout success" };
     default:
       return state;
   }

@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     
     if (jwt) {
-      dispatch(getUser({id: user?.data?.id, jwt}));
+      dispatch(getUser({id: user?.id, jwt}));
       dispatch(findCart(jwt));
       dispatch(getAllRestaurantsAction(jwt));
     }

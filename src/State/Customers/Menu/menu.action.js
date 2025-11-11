@@ -20,6 +20,9 @@ import {
   UPDATE_MENU_ITEMS_AVAILABILITY_FAILURE,
   UPDATE_MENU_ITEMS_AVAILABILITY_REQUEST,
   UPDATE_MENU_ITEMS_AVAILABILITY_SUCCESS,
+  GET_MENU_ITEM_DETAIL_REQUEST,
+  GET_MENU_ITEM_DETAIL_FAILURE,
+  GET_MENU_ITEM_DETAIL_SUCCESS,
 } from "./ActionType";
 
 // localhost:5454/api/admin/ingredients/food/16
@@ -34,6 +37,20 @@ export const getAllMenuItems = (filters = {}) => {
     } catch (error) {
       console.log("catch error ", error);
       dispatch({ type: GET_MENU_ITEMS_FAILURE, payload: error.message });
+    }
+  };
+};
+
+export const getMenuItemDetail = (reqData) => {
+  return async (dispatch) => {
+    dispatch({ type: GET_MENU_ITEM_DETAIL_REQUEST });
+    try {
+      const response = await api.get(`/product/getone/${reqData}`);
+      console.log(response.data.data);
+      dispatch({ type: GET_MENU_ITEM_DETAIL_SUCCESS, payload: response.data.data });
+    } catch (error) {
+      console.log("catch error ", error);
+      dispatch({ type: GET_MENU_ITEM_DETAIL_FAILURE, payload: error.message });
     }
   };
 };

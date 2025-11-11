@@ -5,8 +5,8 @@ const MenuItemCard = ({ data }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (data.merchantId) {
-      navigate(`/restaurant/${data.merchantId}`);
+    if (data.category.merchantId) {
+      navigate(`/restaurant/${data.category.merchantId}`);
     } else {
       console.warn("Không có merchantId trong item:", data);
     }

@@ -71,7 +71,7 @@ export const loginUser = (reqData) => async (dispatch) => {
     const jwt = data.data.accessToken;
     if (jwt) localStorage.setItem("jwt", jwt);
     reqData.navigate("/");
-    dispatch({ type: LOGIN_SUCCESS, payload: jwt });
+    dispatch({ type: LOGIN_SUCCESS, payload: data.data });
   } catch (error) {
     dispatch({
       type: LOGIN_FAILURE,
@@ -93,10 +93,7 @@ export const getUser = (reqData) => {
         },
       });
       const user = response.data;
-      console.log(user)
-
       dispatch({ type: GET_USER_SUCCESS, payload: user });
-      console.log("req User ", user);
     } catch (error) {
       const errorMessage = error.message;
       dispatch({ type: GET_USER_FAILURE, payload: errorMessage });

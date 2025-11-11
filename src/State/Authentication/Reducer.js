@@ -69,7 +69,8 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        jwt: action.payload,
+        jwt: action.payload.accessToken,
+        user: action.payload.user,
         success: "Login success",
       };
 

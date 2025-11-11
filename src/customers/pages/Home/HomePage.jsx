@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllMenuItems } from "../../../State/Customers/Menu/menu.action";
 import MenuItemCard from "../../components/MenuItem/MenuItemCard";
+import NewAddress from "../../components/Address/NewAddressModal";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const HomePage = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              'url("https://placehold.co/1200x700/D9D9D9/333333?text=Nền+ảnh+Đồ+ăn")',
+              'url("https://karlobag.eu/images/upload/j1d0u.jpg")',
             filter: "brightness(80%)",
           }}
         ></div>
@@ -65,6 +66,8 @@ const HomePage = () => {
             Phạm Hùng, X.Bình Hưng, TP.Hồ Chí Minh, 70000, Vietnam
           </span>
         </Typography>
+
+        <NewAddress />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {menuItems.map((item, index) => (
