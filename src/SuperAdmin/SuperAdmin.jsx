@@ -1,36 +1,38 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import SuperAdminSidebar from "./SuperAdminSideBar";
-import SuperAdminCustomerTable from "./SuperAdminCustomerTable/SuperAdminCustomerTable";
 import Customers from "./SuperAdminCustomerTable/Customers";
-import RestaurantTable from "./Restaurants/RestaurantTable";
 import SuperAdminRestaurant from "./Restaurants/SuperAdminRestaurant";
 import RestaurantRequest from "./RestaurantRequest/RestaurantRequest";
-// import AdminDashboard from "./Dashboard/AdminDashboard";
-// import AdminSidebar from "./AdminSidebar";
-// import RestaurantDashboard from "./Dashboard/RestaurantDashboard";
-// import RestaurantsOrder from "./Orders/RestaurantsOrder";
-// import RestaurantsMenu from "./MenuItem/RestaurantsMenu";
-// import AddMenuForm from "./AddMenu/AddMenuForm";
-// import CreateRestaurantForm from "./AddRestaurants/CreateRestaurantForm";
+import SuperAdminDashboard from "./SuperAdminDashboard/SuperAdminDashboard";
+import { useState } from "react";
 
 const SuperAdmin = () => {
-  return (
-    <div className="lg:flex justify-between">
-      <div className="">
-       
-        <SuperAdminSidebar />
-      </div>
+	const [openSideBar, setOpenSideBar] = useState(false);
+	const handleOpenSideBar = () => setOpenSideBar(true);
+	const handleCloseSideBar = () => setOpenSideBar(false);
 
-      <div className="w-[80vw]">
-        <Routes>
-          <Route path="/customers" element={<Customers/>}></Route>
-          <Route path="/restaurants" element={<SuperAdminRestaurant/>}></Route>
-          <Route path="/restaurant-request" element={<RestaurantRequest/>}></Route>
-        </Routes>
-      </div>
-    </div>
-  );
+	return (
+		<div className="lg:flex justify-between">
+			<div className="">
+				<SuperAdminSidebar
+					handleClose={handleCloseSideBar}
+					open={openSideBar}
+				/>
+			</div>
+
+			<div className="flex-1 p-6 md:p-8">
+				<Routes>
+					<Route path="/" element={<SuperAdminDashboard />}></Route>
+					<Route path="/customers" element={<Customers />}></Route>
+					<Route path="/restaurants" element={<SuperAdminRestaurant />}></Route>
+					<Route
+						path="/restaurant-request"
+						element={<RestaurantRequest />}></Route>
+				</Routes>
+			</div>
+		</div>
+	);
 };
 
 export default SuperAdmin;
