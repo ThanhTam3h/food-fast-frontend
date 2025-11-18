@@ -22,7 +22,10 @@ const Verify = () => {
 
     try {
       dispatch(
-        verify({ userData: { otp: otp, email: user?.data?.email }, navigate })
+        verify({
+          userData: { otp: otp, email: user?.email || user?.data?.email },
+          navigate,
+        })
       );
     } catch (error) {
       toast.error(error.message);
@@ -47,7 +50,7 @@ const Verify = () => {
             Chúng tôi đã gửi mã OTP 6 số đến email
             <br />
             <span className="font-medium text-gray-900">
-              {user?.data?.email}
+              {user?.email || user?.data?.email}
             </span>
           </p>
         </div>

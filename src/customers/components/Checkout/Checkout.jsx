@@ -21,6 +21,7 @@ export default function Checkout() {
   const { jwt, user } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
   const { restaurant } = useSelector((state) => state.restaurant);
+  console.log(restaurant);
   const order = useSelector((state) => state.order.previews);
   useEffect(() => {
     dispatch(getAllCartItems({ merchantId: id, jwt: jwt }));
@@ -29,7 +30,7 @@ export default function Checkout() {
 
   const handleLocationSelected = (tempAddressData) => {
     setSelectedAddress(tempAddressData);
-    console.log(selectedAddress, tempAddressData)
+    console.log(selectedAddress, tempAddressData);
     dispatch(
       checkoutPreview({
         merchantId: id,
@@ -51,7 +52,7 @@ export default function Checkout() {
 
     // Build payload cho API createOrder
     const orderPayload = {
-      userId: user?.data?.id, // lấy từ state auth nếu cần
+      userId: user?.id || user?.data?.id, // lấy từ state auth nếu cần
       merchantId: id,
       temporaryAddress: selectedAddress,
       orderItems:

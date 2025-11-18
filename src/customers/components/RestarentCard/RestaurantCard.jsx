@@ -1,69 +1,60 @@
-import React from "react";
-import "./Restaurant.css";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useNavigate } from "react-router-dom";
-import { Card, Chip, IconButton } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useDispatch, useSelector } from "react-redux";
-import { addToFavorites } from "../../../State/Authentication/Action";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { isPresentInFavorites } from "../../../config/logic";
+import { formatDistance } from "../../util/formatDistance";
 
-const RestaurantCard = ({ data, index }) => {
+const RestaurantCard = ({ restaurant }) => {
   const navigate = useNavigate();
-  const { auth } = useSelector((store) => store);
-  const jwt=localStorage.getItem("jwt");
 
-  const dispatch = useDispatch();
-
-  const handleAddToFavorites = () => {
-    dispatch(addToFavorites({restaurantId:data.id,jwt:auth.jwt||jwt}));
+  const handleClick = () => {
+    if (restaurant.id) {
+      navigate(`/restaurant/${restaurant.id}`);
+    }
   };
-
-  const navigateToRestaurant = () => {
-    if(data.open)
-    navigate(`/restaurant/${data.address.city}/${data.name}/${data.id}`);
-  };
-
   return (
-    <Card className="m-5 w-[18rem] productCard ">
-      <div onClick={navigateToRestaurant} className={`${data.open?"cursor-pointer":"cursor-not-allowed"}  relative`}>
+    <div
+      onClick={handleClick}
+      className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300 ease-in-out"
+    >
+      <div className="relative h-48 w-full overflow-hidden">
         <img
-          className="w-full h-[10rem] rounded-t-md object-cover "
-          src={data.images[0]}
-          alt=""
-        />
-        <Chip
-          size="small"
-          // variant="outlined"
-          className="absolute top-2 left-2"
-          color={data.open?"success":"error"}
-          label={data.open ? "Open" : "Closed"}
+          className="w-full h-full object-cover"
+          src={
+            restaurant?.merchantImages[0] ||
+            "https://placehold.co/400x250/000000/FFFFFF?text=Logo+Nha+Hang"
+          }
+          alt={restaurant?.name}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src =
+              "https://placehold.co/400x250/d3d3d3/6b7280?text=Khong+Co+Anh";
+          }}
         />
       </div>
-      <div className="p-4 textPart lg:flex w-full justify-between">
-        <div className="space-y-1">
-          <p className="font-semibold text-lg">{data.name}</p>
-          {/* <div>
-          <span>{data.rating}</span>
-        </div> */}
-          <p className="text-gray-500 text-sm">
-            {data.description.length > 40
-              ? data.description.substring(0, 40) + "..."
-              : data.description}
+
+      <div className="p-4 flex flex-col justify-between h-[110px]">
+        <div>
+          <h3 className="text-xl font-extrabold text-gray-900 truncate mb-1">
+            {restaurant?.name}
+          </h3>
+
+          {/* Địa chỉ */}
+          <p className="text-sm text-gray-600 mb-2 line-clamp-1">
+            {restaurant?.address?.street}
           </p>
         </div>
 
-        <div>
-          <IconButton onClick={handleAddToFavorites}>
-            {isPresentInFavorites(auth.favorites, data) ? (
-              <FavoriteIcon color="primary" />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
-          </IconButton>
+        {/* 3. Thông tin phụ: đánh giá và thời gian */}
+        <div className="flex items-center justify-between text-sm text-gray-700 pt-2 border-t border-gray-100">
+          <div className="flex items-center space-x-1">
+            <AccessTimeIcon sx={{ fontSize: "1rem", color: "#6b7280" }} />{" "}
+            {/* Màu xám cho đồng hồ */}
+            <span className="font-medium text-gray-800">
+              {formatDistance(restaurant.distance)}
+            </span>
+          </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

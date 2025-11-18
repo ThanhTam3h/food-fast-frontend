@@ -14,7 +14,6 @@ const NewAddress = () => {
         </div>
 
         <form className="p-6 space-y-5">
-          {/* Dropdown Tỉnh/Quận/Phường */}
 
           <AddressPicker />
 

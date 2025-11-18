@@ -1,25 +1,26 @@
-import React from 'react'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Button } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '../../../State/Authentication/Action';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../State/Authentication/Action";
 
 const UserProfile = () => {
-   const user = useSelector((state) => state.auth?.user);
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
+  const user = useSelector((state) => state.auth?.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleLogout=()=>{
-    navigate("/")
+  const handleLogout = () => {
+    navigate("/");
     dispatch(logout());
-  }
+  };
   return (
     <div className="min-h-[80vh] flex flex-col justify-center items-center text-center">
       <div className="flex flex-col items-center justify-center">
         <AccountCircleIcon sx={{ fontSize: "9rem" }} />
-        <h1 className="py-5 text-2xl font-semibold">{user?.data?.email}</h1>
-        <p>Email : {user?.data?.email}</p>
+        <h1 className="py-5 text-2xl font-semibold">
+          {user?.email || user?.data?.email}
+        </h1>
+        <p>Email : {user?.email || user?.data?.email}</p>
         <Button
           onClick={handleLogout}
           variant="contained"
@@ -30,6 +31,6 @@ const UserProfile = () => {
       </div>
     </div>
   );
-}
+};
 
-export default UserProfile
+export default UserProfile;

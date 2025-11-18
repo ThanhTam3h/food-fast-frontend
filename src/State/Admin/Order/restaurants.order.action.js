@@ -1,22 +1,26 @@
 // actions.js
-import axios from "axios";
+import { api } from "../../../config/api.js";
 import {
-  UPDATE_ORDER_STATUS_REQUEST,
-  UPDATE_ORDER_STATUS_SUCCESS,
-  UPDATE_ORDER_STATUS_FAILURE,
+  GET_RESTAURANTS_ORDER_FAILURE,
+  GET_RESTAURANTS_ORDER_ITEM_FAILURE,
+  GET_RESTAURANTS_ORDER_ITEM_REQUEST,
+  GET_RESTAURANTS_ORDER_ITEM_SUCCESS,
   GET_RESTAURANTS_ORDER_REQUEST,
   GET_RESTAURANTS_ORDER_SUCCESS,
-  GET_RESTAURANTS_ORDER_FAILURE,
+  UPDATE_ORDER_STATUS_FAILURE,
+  UPDATE_ORDER_STATUS_REQUEST,
+  UPDATE_ORDER_STATUS_SUCCESS,
 } from "./ActionType.js";
-import { api } from "../../../config/api.js";
 
-export const updateOrderStatus = ({orderId,orderStatus,jwt}) => {
+export const updateOrderStatus = ({ orderNumber, orderStatus, jwt }) => {
   return async (dispatch) => {
     try {
       dispatch({ type: UPDATE_ORDER_STATUS_REQUEST });
 
-      const response = await api.put(
-        `/api/admin/orders/${orderId}/${orderStatus}`,{},{
+      const response = await api.patch(
+        `/order/update/${orderNumber}`,
+        { status: orderStatus },
+        {
           headers: {
             Authorization: `Bearer ${jwt}`,
           },
@@ -38,19 +42,17 @@ export const updateOrderStatus = ({orderId,orderStatus,jwt}) => {
   };
 };
 
-export const fetchRestaurantsOrder = ({restaurantId,orderStatus,jwt}) => {
+export const fetchRestaurantsOrder = ({ merchantId, status, jwt }) => {
   return async (dispatch) => {
     try {
       dispatch({ type: GET_RESTAURANTS_ORDER_REQUEST });
 
-      const { data } = await api.get(
-        `/api/admin/order/restaurant/${restaurantId}`,{
-          params: { order_status:orderStatus},
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
+      const { data } = await api.get(`/order/merchant/${merchantId}`, {
+        params: { status },
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
 
       const orders = data;
       console.log("restaurants order ------ ", orders);
@@ -60,6 +62,29 @@ export const fetchRestaurantsOrder = ({restaurantId,orderStatus,jwt}) => {
       });
     } catch (error) {
       dispatch({ type: GET_RESTAURANTS_ORDER_FAILURE, error });
+    }
+  };
+};
+
+export const fetchRestaurantOrderItems = ({ orderNumber, jwt }) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: GET_RESTAURANTS_ORDER_ITEM_REQUEST });
+
+      const { data } = await api.get(`/order/${orderNumber}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+
+      const orderItems = data;
+      console.log("restaurants order ------ ", orderItems);
+      dispatch({
+        type: GET_RESTAURANTS_ORDER_ITEM_SUCCESS,
+        payload: orderItems,
+      });
+    } catch (error) {
+      dispatch({ type: GET_RESTAURANTS_ORDER_ITEM_FAILURE, error });
     }
   };
 };
