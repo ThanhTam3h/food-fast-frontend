@@ -9,24 +9,29 @@ import NotFound from "../customers/pages/NotFound/NotFound";
 import IngredientsList from "../Data/Demo";
 import CreateRestaurantForm from "../Admin/AddRestaurants/CreateRestaurantForm";
 import AdminRouters from "./AdminRouters";
+import SuperAdminLogin from "../SuperAdmin/Login/SuperAdminLogin";
+import { AdminRoute } from "./AdminRoute";
 
 const Routers = () => {
-  const { auth } = useSelector((store) => store);
+	const { auth } = useSelector((store) => store);
 
-  return (
-    <>
-   
-    <Routes>
-      
-      <Route
-        path="/admin/restaurant/*"
-        element={<AdminRouters/>}
-      />
-      <Route path="/*" element={<CustomerRoutes />} />
-    </Routes>
-    </>
-    
-  );
+	return (
+		<>
+			<Routes>
+				<Route path="/admin/restaurant/*" element={<AdminRouters />} />
+				<Route path="/super-admin/login" element={<SuperAdminLogin />} />
+				<Route
+					path="/super-admin/*"
+					element={
+						<AdminRoute>
+							<SuperAdmin />
+						</AdminRoute>
+					}
+				/>
+				<Route path="/*" element={<CustomerRoutes />} />
+			</Routes>
+		</>
+	);
 };
 
 export default Routers;
