@@ -8,6 +8,9 @@ import {
   GET_USERS_NOTIFICATION_SUCCESS,
   GET_USERS_ORDERS_FAILURE,
   GET_USERS_ORDERS_REQUEST,
+  GET_ORDER_BY_NUMBER_REQUEST,
+  GET_ORDER_BY_NUMBER_SUCCESS,
+  GET_ORDER_BY_NUMBER_FAILURE,
 } from "./ActionTypes";
 
 const initialState = {
@@ -16,6 +19,7 @@ const initialState = {
   previews: [],
   orders: [],
   notifications: [],
+  currentOrder: null,
 };
 export const orderReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -37,12 +41,35 @@ export const orderReducer = (state = initialState, { type, payload }) => {
       };
 
     case CREATE_ORDER_SUCCESS:
-    case GET_USERS_NOTIFICATION_SUCCESS:
       return {
         ...state,
         error: null,
         loading: false,
         orders: payload.data,
+      };
+
+    case GET_ORDER_BY_NUMBER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+        currentOrder: null,
+      };
+
+    case GET_ORDER_BY_NUMBER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        currentOrder: payload,
+      };
+
+    case GET_ORDER_BY_NUMBER_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+        currentOrder: null,
       };
 
     case GET_USERS_NOTIFICATION_SUCCESS:

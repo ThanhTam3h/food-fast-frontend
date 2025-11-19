@@ -3,6 +3,9 @@ import {
   createOrderFailure,
   createOrderRequest,
   createOrderSuccess,
+  getOrderByNumberFailure,
+  getOrderByNumberRequest,
+  getOrderByNumberSuccess,
   getUsersOrdersFailure,
   getUsersOrdersRequest,
   getUsersOrdersSuccess,
@@ -56,6 +59,28 @@ export const checkoutPreview = (reqData) => {
     } catch (error) {
       console.log("error ", error);
       dispatch({ type: CHECKOUT_PREVIEW_FAILURE, payload: error.message });
+    }
+  };
+};
+
+export const getOrderByNumber = (orderNumber, jwt) => {
+  return async (dispatch) => {
+    dispatch(getOrderByNumberRequest());
+    try {
+      const { data } = await api.get(`/order/${orderNumber}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("Order by number:", data);
+      dispatch(getOrderByNumberSuccess(data.data[0])); // data.data[0] là đơn hàng
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      dispatch(
+        getOrderByNumberFailure(
+          error.response?.data?.message || error.message || "Lỗi tải đơn hàng"
+        )
+      );
     }
   };
 };

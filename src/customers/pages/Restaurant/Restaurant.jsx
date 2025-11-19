@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { getAllCartItems } from "../../../State/Customers/Cart/cart.action";
 import { getAllMenuItems } from "../../../State/Customers/Menu/menu.action";
 import {
   getRestaurantById,
   getRestaurantsCategory,
 } from "../../../State/Customers/Restaurant/restaurant.action";
 import ProductCard from "../../components/Product/ProductCard";
-import { getAllCartItems } from "../../../State/Customers/Cart/cart.action";
 
 const Restaurant = () => {
   const { id } = useParams();
@@ -152,11 +152,6 @@ const Restaurant = () => {
             </div>
           </section>
         ))}
-
-        {/* FOOTER */}
-        <div className="text-center text-sm text-gray-400 mt-10 p-4 border-t">
-          --- Kết thúc danh sách sản phẩm ---
-        </div>
       </div>
     </div>
   );

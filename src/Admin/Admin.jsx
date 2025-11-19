@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import AdminDashboard from "./Dashboard/AdminDashboard";
-import AdminSidebar from "./AdminSidebar";
-import RestaurantDashboard from "./Dashboard/RestaurantDashboard";
-import RestaurantsOrder from "./Orders/RestaurantsOrder";
-import RestaurantsMenu from "./Food/RestaurantsMenu";
-import AddMenuForm from "./Food/AddMenuForm";
-import CreateRestaurantForm from "./AddRestaurants/CreateRestaurantForm";
-import IngredientTable from "./Events/Events";
-import Category from "./Category/Category";
-import Ingredients from "./Ingredients/Ingredients";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
 	getIngredientCategory,
 	getIngredientsOfRestaurant,
 } from "../State/Admin/Ingredients/Action";
+import { fetchRestaurantsOrder } from "../State/Admin/Order/restaurants.order.action";
 import { getRestaurantsCategory } from "../State/Customers/Restaurant/restaurant.action";
-import Details from "./Details/Details";
+import CreateRestaurantForm from "./AddRestaurants/CreateRestaurantForm";
 import AdminNavbar from "./AdminNavbar";
 import { getUsersOrders } from "../State/Customers/Orders/Action";
 import { fetchRestaurantsOrder } from "../State/Admin/Order/restaurants.order.action";
 import OrderPage from "./Orders/OrdersPage";
 import MenuManagement from "./Food/MenuManagement";
+import Category from "./Category/Category";
+import Details from "./Details/Details";
+import IngredientTable from "./Events/Events";
+import AddMenuForm from "./Food/AddMenuForm";
+import RestaurantsMenu from "./Food/RestaurantsMenu";
+import Ingredients from "./Ingredients/Ingredients";
+import RestaurantsOrder from "./Orders/RestaurantsOrder";
+import RestaurantDashboard from "./pages/RestaurantDashboard";
+
 const Admin = () => {
 	const dispatch = useDispatch();
 	const [openSideBar, setOpenSideBar] = useState(false);

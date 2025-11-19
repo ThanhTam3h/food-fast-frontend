@@ -8,6 +8,9 @@ import {
   deleteRestaurantFailure,
   deleteRestaurantRequest,
   deleteRestaurantSuccess,
+  getAllNearbyRestaurantsFailure,
+  getAllNearbyRestaurantsRequest,
+  getAllNearbyRestaurantsSuccess,
   getAllRestaurantsFailure,
   getAllRestaurantsRequest,
   getAllRestaurantsSuccess,
@@ -46,16 +49,12 @@ import {
   UPDATE_RESTAURANT_STATUS_SUCCESS,
 } from "./ActionTypes";
 
-export const getAllRestaurantsAction = (token) => {
+export const getAllRestaurantsAction = () => {
   return async (dispatch) => {
     dispatch(getAllRestaurantsRequest());
     try {
-      const { data } = await api.get("/api/restaurants", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      dispatch(getAllRestaurantsSuccess(data));
+      const { data } = await api.get("merchants", {});
+      dispatch(getAllRestaurantsSuccess(data.data));
       console.log("all restaurant ", data);
     } catch (error) {
       dispatch(getAllRestaurantsFailure(error));
@@ -68,13 +67,28 @@ export const getRestaurantById = (id) => {
     dispatch(getRestaurantByIdRequest());
     try {
       const response = await api.get(`merchants/${id}`);
-      console.log(response.data.data);
       dispatch(getRestaurantByIdSuccess(response.data.data));
+      console.log(response.data.data);
     } catch (error) {
       dispatch(getRestaurantByIdFailure(error));
     }
   };
 };
+
+export const getNearbyRestaurants =
+  ({ lat, lng }) =>
+  async (dispatch) => {
+    dispatch(getAllNearbyRestaurantsRequest());
+    try {
+      const response = await api.get(
+        `merchants/nearby?lat=${lat}&lng=${lng}&radius=100`
+      );
+      console.log(response.data.data);
+      dispatch(getAllNearbyRestaurantsSuccess(response.data.data));
+    } catch (error) {
+      dispatch(getAllNearbyRestaurantsFailure(error));
+    }
+  };
 
 export const getRestaurantByUserId = (jwt) => {
   return async (dispatch) => {

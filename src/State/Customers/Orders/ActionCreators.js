@@ -30,3 +30,16 @@ export const getUsersOrdersRequest = () => ({
     payload: error,
   });
   
+  export const getOrderByNumberRequest = () => ({
+    type: actionTypes.GET_ORDER_BY_NUMBER_REQUEST,
+  });
+
+  export const getOrderByNumberSuccess = (order) => ({
+    type: actionTypes.GET_ORDER_BY_NUMBER_SUCCESS,
+    payload: order,
+  });
+
+  export const getOrderByNumberFailure = (error) => ({
+    type: actionTypes.GET_ORDER_BY_NUMBER_FAILURE,
+    payload: error,
+  });

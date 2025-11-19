@@ -3,35 +3,48 @@ import "./App.css";
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "./State/Authentication/Action";
-import { getRestaurantByUserId } from "./State/Customers/Restaurant/restaurant.action";
 import Routers from "./Routers/Routers";
-import lightTheme from "./theme/LightTheme";
+import { getUser } from "./State/Authentication/Action";
+import darkTheme from "./theme/DarkTheme";
 
 function App() {
-	const dispatch = useDispatch();
-	const { auth } = useSelector((store) => store);
-	useEffect(() => {
-		// Chỉ chạy khi:
-		// 1. auth.jwt đã được nạp (từ redux-persist)
-		// 2. auth.user cũng đã được nạp (và có id)
-		if (auth.jwt && auth.user?.id) {
-			dispatch(getUser({ id: auth.user.id, jwt: auth.jwt }));
-		}
-	}, [dispatch, auth.jwt, auth.user?.id]); // <-- Phụ thuộc vào state của Redux
+  const dispatch = useDispatch();
+  const { auth } = useSelector((store) => store);
+  const user = useSelector((state) => state.auth?.user);
+  const jwt = localStorage.getItem("jwt") || auth.jwt;
 
-	// 2. useEffect để lấy nhà hàng (nếu là chủ)
-	useEffect(() => {
-		if (auth.jwt && auth.user?.role === "ROLE_RESTAURANT_OWNER") {
-			dispatch(getRestaurantByUserId(auth.jwt));
-		}
-	}, [dispatch, auth.jwt, auth.user?.role]);
-	return (
-		<ThemeProvider theme={lightTheme}>
-			<CssBaseline />
-			<Routers />
-		</ThemeProvider>
-	);
+  useEffect(() => {
+    if (!jwt) return;
+
+    // Try to get id from user object (common shape: user.id)
+    let id = user?.id || user?.data?.id || user?.userId;
+
+    // If no id in state, try to decode JWT payload (robust fallback)
+    if (!id && jwt) {
+      try {
+        const payload = JSON.parse(atob(jwt.split(".")[1]));
+        id = payload?.id || payload?.sub || payload?.userId || payload?.uid;
+      } catch (e) {
+        // ignore decode errors
+      }
+    }
+
+    if (id) {
+      dispatch(getUser({ id, jwt }));
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   if (user?.role === "ROLE_RESTAURANT_OWNER") {
+  //     dispatch(getRestaurantByUserId(auth.jwt || jwt));
+  //   }
+  // }, [user, auth.jwt, dispatch, jwt]);
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Routers />
+    </ThemeProvider>
+  );
 }
 
 export default App;

@@ -16,6 +16,7 @@ const restaurantReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.CREATE_RESTAURANT_REQUEST:
     case actionTypes.GET_ALL_RESTAURANTS_REQUEST:
+    case actionTypes.GET_NEARBY_RESTAURANTS_REQUEST:
     case actionTypes.DELETE_RESTAURANT_REQUEST:
     case actionTypes.UPDATE_RESTAURANT_REQUEST:
     case actionTypes.GET_RESTAURANT_BY_ID_REQUEST:
@@ -33,17 +34,20 @@ const restaurantReducer = (state = initialState, action) => {
         usersRestaurant:action.payload
       };
     case actionTypes.GET_ALL_RESTAURANTS_SUCCESS:
+    case actionTypes.GET_NEARBY_RESTAURANTS_SUCCESS:
       return {
         ...state,
         loading: false,
         restaurants: action.payload,
       };
+
     case actionTypes.GET_RESTAURANT_BY_ID_SUCCESS:
       return {
         ...state,
         loading: false,
         restaurant: action.payload,
       };
+
     case actionTypes.GET_RESTAURANT_BY_USER_ID_SUCCESS:
     case actionTypes.UPDATE_RESTAURANT_STATUS_SUCCESS:
     case actionTypes.UPDATE_RESTAURANT_SUCCESS:
@@ -108,6 +112,7 @@ const restaurantReducer = (state = initialState, action) => {
       };
     case actionTypes.CREATE_RESTAURANT_FAILURE:
     case actionTypes.GET_ALL_RESTAURANTS_FAILURE:
+    case actionTypes.GET_NEARBY_RESTAURANTS_FAILURE:
     case actionTypes.DELETE_RESTAURANT_FAILURE:
     case actionTypes.UPDATE_RESTAURANT_FAILURE:
     case actionTypes.GET_RESTAURANT_BY_ID_FAILURE:
