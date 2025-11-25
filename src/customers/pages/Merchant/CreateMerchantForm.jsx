@@ -42,6 +42,11 @@ const CreateMerchantForm = () => {
 		OTHERS: [],
 	});
 
+	const isValidNumber = (value) => {
+		const num = parseFloat(value);
+		return Number.isFinite(num);
+	};
+
 	const [status, setStatus] = useState({ message: "", type: "" });
 	const [isLoading, setIsLoading] = useState(false);
 
