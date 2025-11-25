@@ -111,14 +111,16 @@ const CreateMerchantForm = () => {
 			}
 
 			// === Append temporaryAddress as nested object for backend ===
-			const temporaryAddress = {
-				street: form.restaurantAddress,
-				location: {
-					type: "Point",
-					coordinates: [lng, lat],
-				},
-			};
-			formData.append("temporaryAddress", JSON.stringify(temporaryAddress));
+			formData.append("temporaryAddress[street]", form.restaurantAddress);
+			formData.append("temporaryAddress[location][type]", "Point");
+			formData.append(
+				"temporaryAddress[location][coordinates][]",
+				String(form.restaurantLng)
+			);
+			formData.append(
+				"temporaryAddress[location][coordinates][]",
+				String(form.restaurantLat)
+			);
 
 			// === Append files ===
 			Object.keys(images).forEach((type) => {
