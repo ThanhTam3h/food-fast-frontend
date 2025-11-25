@@ -32,9 +32,11 @@ const OrderDrone = () => {
 		const fetchData = async () => {
 			try {
 				const [orderRes, droneRes] = await Promise.all([
-					fetch("https://food-fast-frontend.vercel.app/api/v1/order"),
 					fetch(
-						"https://food-fast-frontend.vercel.app/api/v1/order/available-drones"
+						"https://food-fast-backend-production.up.railway.app/api/v1/order"
+					),
+					fetch(
+						"https://food-fast-backend-production.up.railway.app/api/v1/order/available-drones"
 					),
 				]);
 				const orderJson = await orderRes.json();
@@ -98,7 +100,7 @@ const OrderDrone = () => {
 		setAssigningInProgress(true);
 		try {
 			const res = await fetch(
-				`https://food-fast-frontend.vercel.app/api/v1/order/${assigningOrder.orderNumber}/assign-drone`,
+				`https://food-fast-backend-production.up.railway.app/api/v1/order/${assigningOrder.orderNumber}/assign-drone`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },

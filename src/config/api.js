@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const API_URL =
 	process.env.REACT_APP_API_URL ||
-	"https://food-fast-frontend.vercel.app/api/v1";
+	"https://food-fast-backend-production.up.railway.app/api/v1";
 
 export const api = axios.create({
 	baseURL: API_URL,

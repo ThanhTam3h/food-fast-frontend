@@ -29,7 +29,7 @@ import {
 // =========================================================================
 // Config & Constants
 // =========================================================================
-const API_BASE = "https://food-fast-frontend.vercel.app/api/v1";
+const API_BASE = "food-fast-backend-production.up.railway.app/api/v1";
 
 const MerchantStatus = {
   PENDING: "PENDING",
