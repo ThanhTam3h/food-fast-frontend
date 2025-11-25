@@ -90,14 +90,10 @@ export default function Checkout() {
 						<h2 className="text-xl font-semibold mb-3 flex items-center text-gray-800">
 							<MapPin className="w-5 h-5 mr-2 text-red-500" /> Giao đến
 						</h2>
-						{restaurant?.address?.location?.coordinates ? (
-							<AddressPicker
-								restaurant={restaurant}
-								onLocationSelected={handleLocationSelected}
-							/>
-						) : (
-							<div className="text-gray-500 py-4">Đang tải bản đồ...</div>
-						)}
+						<AddressPicker
+							restaurant={restaurant}
+							onLocationSelected={handleLocationSelected}
+						/>
 					</section>
 
 					<section className="border-b pb-8">
