@@ -24,7 +24,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 // THAY ĐỔI DÒNG NÀY THEO BACKEND CỦA BẠN
-const API_URL = "http://localhost:3000/api/v1/merchants/merchant";
+const API_URL =
+	"https://food-fast-frontend.vercel.app/api/v1/merchants/merchant";
 // Ví dụ: https://api.foodapp.com/api/v1/merchants/merchant
 
 function StatusBadge({ status, isTemporarilyClosed }) {
