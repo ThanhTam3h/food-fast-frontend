@@ -8,7 +8,7 @@ const Partner = () => {
 	// Validate email từ backend
 	const validateEmail = async () => {
 		const res = await fetch(
-			"https://food-fast-backend.onrender.com/api/v1/merchants/validate-email",
+			"https://food-fast-backend-production.up.railway.app/api/v1/merchants/validate-email",
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
