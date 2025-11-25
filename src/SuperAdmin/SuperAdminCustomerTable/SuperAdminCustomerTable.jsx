@@ -279,13 +279,13 @@ export default function SuperAdminCustomerTable() {
 								Quản lý người dùng
 							</h1>
 							<p className="mt-1 text-sm text-gray-500">
-								Thêm, sửa, vô hiệu hóa tài khoản người dùng
+								Sửa thông tin, vô hiệu hóa tài khoản người dùng
 							</p>
 						</div>
-						<Button onClick={openAdd}>
-							<Plus className="mr-2 size-4" />
-							Thêm người dùng
-						</Button>
+						{/* <Button onClick={openAdd}>
+                <Plus className="mr-2 size-4" />
+                Thêm người dùng
+              </Button> */}
 					</div>
 
 					{/* Search + Filter */}
