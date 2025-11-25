@@ -79,24 +79,43 @@ const CreateMerchantForm = () => {
 			return;
 		}
 
+		if (
+			!isValidNumber(form.restaurantLat) ||
+			!isValidNumber(form.restaurantLng)
+		) {
+			setStatus({
+				message: "Vui lòng chọn vị trí chính xác trên bản đồ.",
+				type: "error",
+			});
+			setIsLoading(false);
+			return;
+		}
+
 		try {
 			const formData = new FormData();
 
 			// === Append form fields except restaurantLat/Lng ===
 			Object.keys(form).forEach((key) => {
 				if (key.startsWith("restaurant")) return;
-				formData.append(key, form[key]);
+				if (form[key] === undefined || form[key] === null) return;
+				formData.append(key, String(form[key]));
 			});
+
+			const lng = parseFloat(form.restaurantLng);
+			const lat = parseFloat(form.restaurantLat);
+
+			if (!Number.isFinite(lng) || !Number.isFinite(lat)) {
+				setStatus({ message: "Toạ độ không hợp lệ.", type: "error" });
+				setIsLoading(false);
+				return;
+			}
 
 			// === Append temporaryAddress as nested object for backend ===
 			const temporaryAddress = {
 				street: form.restaurantAddress,
 				location: {
 					type: "Point",
-					coordinates: [
-						parseFloat(form.restaurantLng),
-						parseFloat(form.restaurantLat),
-					],
+					coordinates: [lng, lat],
 				},
 			};
 			formData.append("temporaryAddress", JSON.stringify(temporaryAddress));
