@@ -13,6 +13,7 @@ const Navbar = () => {
   const location = useLocation();
   const { cart } = useSelector((store) => store);
   const user = useSelector((state) => state.auth?.user);
+  console.log(user)
   const dispatch = useDispatch();
   const isRestaurantPage =
     /^\/restaurant\/\d+$/.test(location.pathname) ||
@@ -74,7 +75,7 @@ const Navbar = () => {
   };
 
   const navigateToPartner = () => {
-    navigate("/partner");
+    navigate("/register-merchant");
   };
 
   return (

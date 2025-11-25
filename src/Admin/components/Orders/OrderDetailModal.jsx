@@ -57,7 +57,7 @@ export const OrderDetailModal = ({ order, onAction, onClose, isLoading }) => {
         {/* Body */}
         {isLoading ? (
           <div className="p-20 text-center">
-            <div className="animate-spin w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full mx-auto"></div>
+            <div className="animate-spin w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full mx-auto"></div>
             <p className="mt-4 text-gray-500">Đang tải chi tiết đơn hàng...</p>
           </div>
         ) : order ? (
@@ -183,7 +183,7 @@ export const OrderDetailModal = ({ order, onAction, onClose, isLoading }) => {
             {(order.status === "NEW" || order.status === "PENDING") && (
               <>
                 <Button
-                  onClick={() => onAction(order.orderNumber, "PREPARING")}
+                  onClick={() => onAction(order.orderNumber, "CONFIRMED")}
                   variant="primary"
                   className="flex"
                 >
@@ -201,6 +201,15 @@ export const OrderDetailModal = ({ order, onAction, onClose, isLoading }) => {
             {order.status === "PREPARING" && (
               <Button
                 onClick={() => onAction(order.orderNumber, "READY")}
+                variant="secondary"
+                className="flex"
+              >
+                <Package className="w-5 h-5 mr-2" /> Sẵn Sàng Giao
+              </Button>
+            )}
+            {order.status === "READY" && (
+              <Button
+                onClick={() => onAction(order.orderNumber, "DELIVERING")}
                 variant="secondary"
                 className="flex"
               >

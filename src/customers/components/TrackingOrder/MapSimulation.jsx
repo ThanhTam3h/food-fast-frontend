@@ -1,58 +1,220 @@
+// import React, { useEffect, useRef, useState } from "react";
+// import goongjs from "@goongmaps/goong-js";
+// import "@goongmaps/goong-js/dist/goong-js.css";
+// import { io } from "socket.io-client";
+// import DroneImage from "../../assets/drone.png"; // sửa đường dẫn nếu cần
+
+// const GOONG_MAP_KEY = process.env.REACT_APP_GOONG_MAP_KEY;
+// const HUB_DEFAULT = [106.6972, 10.7758];
+
+// const statusMap = {
+//   FLYING_TO_PICKUP: "Drone đang bay đến nhà hàng lấy món",
+//   AT_PICKUP_POINT: "Đã đến nhà hàng – Đang nhận đồ ăn",
+//   OUT_FOR_DELIVERY: "Đã lấy hàng – Đang giao",
+//   DROPPING_OFF: "Đang thả đồ ăn xuống!",
+//   RETURNING_TO_HUB: "Đã giao xong – Drone đang quay về trạm",
+//   LANDING_AT_HUB: "Drone đã về trạm – Sẵn sàng nhiệm vụ tiếp theo",
+// };
+
+// const socket = io("http://localhost:3000", {
+//   transports: ["websocket"],
+//   reconnection: true,
+//   reconnectionAttempts: 5,
+//   reconnectionDelay: 1000,
+// });
+
+// export default function MapSimulation({ order }) {
+//   const mapContainer = useRef(null);
+//   const mapRef = useRef(null);
+//   const droneMarkerRef = useRef(null);
+//   const [droneStatus, setDroneStatus] = useState(null);
+
+//   const restaurantCoords = order?.merchant?.address?.location?.coordinates;
+//   const customerCoords = order?.address?.location?.coordinates;
+//   const hubCoords = order?.droneId
+//     ? order?.drone?.droneHub?.location?.coordinates || HUB_DEFAULT
+//     : HUB_DEFAULT;
+
+//   const isValid = restaurantCoords && customerCoords && hubCoords;
+
+//   useEffect(() => {
+//     if (!isValid || !mapContainer.current || !order?.orderNumber) return;
+
+//     goongjs.accessToken = GOONG_MAP_KEY;
+
+//     // QUAN TRỌNG: Join room ngay khi có orderNumber
+//     socket.emit("joinOrder", { orderNumber: order.orderNumber });
+
+//     const map = new goongjs.Map({
+//       container: mapContainer.current,
+//       style: "https://tiles.goong.io/assets/goong_map_web.json",
+//       center: [
+//         (hubCoords[0] + restaurantCoords[0] + customerCoords[0]) / 3,
+//         (hubCoords[1] + restaurantCoords[1] + customerCoords[1]) / 3,
+//       ],
+//       zoom: 14,
+//     });
+//     mapRef.current = map;
+
+//     map.on("load", () => {
+//       const bounds = new goongjs.LngLatBounds();
+//       [hubCoords, restaurantCoords, customerCoords].forEach((c) => bounds.extend(c));
+//       map.fitBounds(bounds, { padding: 100, duration: 1000, maxZoom: 17 });
+
+//       // Markers
+//       new goongjs.Marker({ color: "#8b5cf6" }).setLngLat(hubCoords).setPopup(new goongjs.Popup().setText("Hub")).addTo(map);
+//       new goongjs.Marker({ color: "#ef4444" }).setLngLat(restaurantCoords).setPopup(new goongjs.Popup().setText(order.merchant.name)).addTo(map);
+//       new goongjs.Marker({ color: "#10b981" }).setLngLat(customerCoords).setPopup(new goongjs.Popup().setText("Khách hàng")).addTo(map);
+
+//       // Route
+//       map.addSource("route", {
+//         type: "geojson",
+//         data: {
+//           type: "Feature",
+//           geometry: {
+//             type: "LineString",
+//             coordinates: [hubCoords, restaurantCoords, customerCoords, hubCoords],
+//           },
+//         },
+//       });
+//       map.addLayer({
+//         id: "route",
+//         type: "line",
+//         source: "route",
+//         paint: { "line-color": "#00ff88", "line-width": 6, "line-opacity": 0.8 },
+//       });
+
+//       // Drone Marker
+//       if (order?.droneId) {
+//         const el = document.createElement("div");
+//         el.style.width = "80px";
+//         el.style.height = "80px";
+//         el.style.backgroundImage = `url(${DroneImage})`;
+//         el.style.backgroundSize = "contain";
+//         el.style.backgroundRepeat = "no-repeat";
+//         el.style.backgroundPosition = "center";
+//         el.style.filter = "drop-shadow(0 0 15px #00ff88)";
+
+//         droneMarkerRef.current = new goongjs.Marker({
+//           element: el,
+//           anchor: "bottom",
+//         })
+//           .setLngLat(hubCoords)
+//           .addTo(map);
+//       }
+//     });
+
+//     // Nhận vị trí drone realtime
+//     const handlePositionUpdate = (data) => {
+//       if (data.orderNumber !== order.orderNumber) return;
+//       if (droneMarkerRef.current) {
+//         droneMarkerRef.current.setLngLat(data.position);
+//       }
+//       setDroneStatus(data.phase);
+//     };
+
+//     socket.on("drone-position-update", handlePositionUpdate);
+
+//     return () => {
+//       socket.off("drone-position-update", handlePositionUpdate);
+//       mapRef.current?.remove();
+//     };
+//   }, [order?.orderNumber, isValid]); // ← QUAN TRỌNG: join lại khi orderNumber có
+
+//   return (
+//     <div className="w-full h-96 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#00b14f] relative">
+//       {droneStatus && (
+//         <div className="absolute top-0 left-0 right-0 bg-[#00b14f] text-white py-2 px-4 text-center font-bold text-lg z-10">
+//           {statusMap[droneStatus] || droneStatus}
+//         </div>
+//       )}
+//       <div ref={mapContainer} className="w-full h-full" />
+//     </div>
+//   );
+// }
+
+// src/components/TrackingOrder/MapSimulation.jsx
+import React, { useEffect, useRef, useState } from "react";
 import goongjs from "@goongmaps/goong-js";
 import "@goongmaps/goong-js/dist/goong-js.css";
-import { useEffect, useRef } from "react";
-import DroneImage from "../../assets/drone.png";
+import { io } from "socket.io-client";
+import DroneImage from "../../assets/drone.png"; // sửa đường dẫn nếu cần
 
 const GOONG_MAP_KEY = process.env.REACT_APP_GOONG_MAP_KEY;
+const HUB_DEFAULT = [106.6972, 10.7758];
 
-export default function MapSimulation({ order, arrived, onDelivered }) {
+const statusMap = {
+  FLYING_TO_PICKUP: "Drone đang bay đến nhà hàng lấy món",
+  AT_PICKUP_POINT: "Đã đến nhà hàng – Đang nhận đồ ăn",
+  OUT_FOR_DELIVERY: "Đã lấy hàng – Đang bay đến bạn",
+  DROPPING_OFF: "Đang thả đồ ăn xuống cho bạn!",
+  RETURNING_TO_HUB: "Giao thành công – Cảm ơn bạn đã đặt hàng!",
+  LANDING_AT_HUB: "Nhiệm vụ hoàn tất – Hẹn gặp lại!",
+};
+
+const socket = io("http://localhost:3000", {
+  transports: ["websocket"],
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000,
+});
+
+export default function MapSimulation({ order }) {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
   const droneMarkerRef = useRef(null);
+  const [droneStatus, setDroneStatus] = useState(null);
 
-  const fromLng = order?.merchant?.address?.location?.coordinates[0];
-  const fromLat = order?.merchant?.address?.location?.coordinates[1];
-  const toLng = order?.address?.location?.coordinates[0];
-  const toLat = order?.address?.location?.coordinates[1];
+  const restaurantCoords = order?.merchant?.address?.location?.coordinates;
+  const customerCoords = order?.address?.location?.coordinates;
+  const hubCoords = order?.droneId
+    ? order?.drone?.droneHub?.location?.coordinates || HUB_DEFAULT
+    : HUB_DEFAULT;
+
+  const isValid = restaurantCoords && customerCoords && hubCoords;
 
   useEffect(() => {
-    if (!GOONG_MAP_KEY || !mapContainer.current) return;
+    if (!isValid || !mapContainer.current || !order?.orderNumber) return;
 
     goongjs.accessToken = GOONG_MAP_KEY;
 
-    // Khởi tạo map 1 lần duy nhất
+    // Join room để nhận realtime
+    socket.emit("joinOrder", { orderNumber: order.orderNumber });
+
     const map = new goongjs.Map({
       container: mapContainer.current,
       style: "https://tiles.goong.io/assets/goong_map_web.json",
-      center: [(fromLng + toLng) / 2, (fromLat + toLat) / 2],
+      center: [
+        (hubCoords[0] + restaurantCoords[0] + customerCoords[0]) / 3,
+        (hubCoords[1] + restaurantCoords[1] + customerCoords[1]) / 3,
+      ],
       zoom: 14,
     });
-
     mapRef.current = map;
 
     map.on("load", () => {
-      // Fit bounds 2 điểm
-      map.fitBounds(
-        [
-          [fromLng, fromLat],
-          [toLng, toLat],
-        ],
-        { padding: 100, duration: 1200, maxZoom: 17 }
-      );
+      // Fit toàn bộ hành trình (vẫn cần hub để zoom đẹp)
+      const bounds = new goongjs.LngLatBounds();
+      [hubCoords, restaurantCoords, customerCoords].forEach((c) => bounds.extend(c));
+      map.fitBounds(bounds, { padding: 100, duration: 1000, maxZoom: 17 });
 
-      // Marker nhà hàng
-      new goongjs.Marker({ color: "#dc2626" })
-        .setLngLat([fromLng, fromLat])
-        .setPopup(new goongjs.Popup({ offset: 15 }).setText("Nhà hàng"))
+      // Markers
+      new goongjs.Marker({ color: "#8b5cf6" })
+        .setLngLat(hubCoords)
+        .setPopup(new goongjs.Popup().setText("Trạm Drone"))
         .addTo(map);
 
-      // Marker khách
-      new goongjs.Marker({ color: "#2563eb" })
-        .setLngLat([toLng, toLat])
-        .setPopup(new goongjs.Popup({ offset: 15 }).setText("Giao đến đây"))
+      new goongjs.Marker({ color: "#ef4444" })
+        .setLngLat(restaurantCoords)
+        .setPopup(new goongjs.Popup().setText(order.merchant.name))
         .addTo(map);
 
-      // Đường bay
+      new goongjs.Marker({ color: "#10b981" })
+        .setLngLat(customerCoords)
+        .setPopup(new goongjs.Popup().setText("Bạn đang ở đây"))
+        .addTo(map);
+
+      // ĐÃ SỬA: Chỉ vẽ đường Hub → Nhà hàng → Khách (không về hub)
       map.addSource("route", {
         type: "geojson",
         data: {
@@ -60,8 +222,10 @@ export default function MapSimulation({ order, arrived, onDelivered }) {
           geometry: {
             type: "LineString",
             coordinates: [
-              [fromLng, fromLat],
-              [toLng, toLat],
+              hubCoords,
+              restaurantCoords,
+              customerCoords,
+              // Không có dòng về hub nữa
             ],
           },
         },
@@ -71,67 +235,73 @@ export default function MapSimulation({ order, arrived, onDelivered }) {
         id: "route",
         type: "line",
         source: "route",
-        paint: { "line-color": "#00b14f", "line-width": 6 },
+        paint: {
+          "line-color": "#00ff88",
+          "line-width": 7,
+          "line-opacity": 0.9,
+        },
       });
 
-      // =====================
-      // Drone marker (always)
-      // =====================
-      const droneImg = new Image(70, 70);
-      droneImg.src = DroneImage;
-
-      droneImg.onload = () => {
+      // Tạo drone marker (bắt đầu từ hub)
+      if (order?.droneId) {
         const el = document.createElement("div");
-        el.appendChild(droneImg);
+        el.style.width = "80px";
+        el.style.height = "80px";
+        el.style.backgroundImage = `url(${DroneImage})`;
+        el.style.backgroundSize = "contain";
+        el.style.backgroundRepeat = "no-repeat";
+        el.style.backgroundPosition = "center";
+        el.style.filter = "drop-shadow(0 0 20px #00ff88)";
 
         droneMarkerRef.current = new goongjs.Marker({
           element: el,
-          anchor: "center",
+          anchor: "bottom",
         })
-          .setLngLat(arrived ? [toLng, toLat] : [fromLng, fromLat])
+          .setLngLat(hubCoords)
           .addTo(map);
-
-        // ===========================
-        // 🚁 Animation CHỈ khi chưa giao
-        // ===========================
-        if (!arrived) {
-          let start = Date.now();
-          const duration = 5000;
-
-          const animate = () => {
-            const elapsed = Date.now() - start;
-            const progress = Math.min(elapsed / duration, 1);
-
-            const currentLng = fromLng + (toLng - fromLng) * progress;
-            const currentLat = fromLat + (toLat - fromLat) * progress;
-
-            droneMarkerRef.current.setLngLat([currentLng, currentLat]);
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              if (typeof onDelivered === "function") onDelivered();
-            }
-          };
-
-          requestAnimationFrame(animate);
-        }
-      };
+      }
     });
 
-    return () => mapRef.current?.remove();
-  }, [fromLng, fromLat, toLng, toLat]);
+    // Xử lý cập nhật vị trí drone từ backend
+    const handlePositionUpdate = (data) => {
+      if (data.orderNumber !== order.orderNumber) return;
+
+      // Nếu drone đang về hub → KHÔNG di chuyển marker nữa
+      // Drone sẽ dừng lại ở nhà khách → đẹp & hợp lý
+      if (data.phase === "RETURNING_TO_HUB" || data.phase === "LANDING_AT_HUB") {
+        setDroneStatus(data.phase);
+        return; // Không cập nhật vị trí → drone dừng lại
+      }
+
+      // Các giai đoạn khác: bay bình thường
+      if (droneMarkerRef.current) {
+        droneMarkerRef.current.setLngLat(data.position);
+      }
+      setDroneStatus(data.phase);
+    };
+
+    socket.on("drone-position-update", handlePositionUpdate);
+
+    return () => {
+      socket.off("drone-position-update", handlePositionUpdate);
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [order?.orderNumber, isValid]);
 
   return (
-    <div className="mt-8 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#00b14f]">
-      <div ref={mapContainer} className="w-full h-96" />
-
-      <div className="bg-[#00b14f] text-white py-4 px-6 text-center font-bold text-lg">
-        Drone {order?.droneId || "DRONE-001"} đang giao hàng
-        <div className="text-sm font-normal mt-1">
-          {order?.address?.street || "Đang xác định địa chỉ..."}
+    <div className="w-full h-96 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#00b14f] relative mt-8">
+      {/* Hiển thị trạng thái realtime */}
+      {droneStatus && (
+        <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-[#00b14f] to-[#00d95f] text-white py-3 px-6 text-center font-bold text-lg z-10 shadow-lg">
+          {statusMap[droneStatus] || "Drone đang hoạt động..."}
         </div>
-      </div>
+      )}
+
+      {/* Bản đồ */}
+      <div ref={mapContainer} className="w-full h-full" />
     </div>
   );
 }

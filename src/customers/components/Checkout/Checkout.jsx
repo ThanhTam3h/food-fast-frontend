@@ -74,10 +74,10 @@ export default function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
+    <div className="min-h-screen bg-gray-100 font-sans mt-10">
       <div className="max-w-4xl mx-auto bg-white shadow-2xl md:rounded-xl overflow-hidden">
         <div className="p-6 md:p-8 border-b border-gray-100 bg-white">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-gray-900 mt-10">
             Bước cuối cùng - Thanh toán
           </h1>
           <p className="text-md text-gray-500 mt-1">
@@ -102,7 +102,6 @@ export default function Checkout() {
               Tóm tắt đơn hàng
             </h2>
             <Cart />
-            <SpecialInstruction />
           </section>
 
           {/* 3. Chi tiết thanh toán (Payment Details) */}

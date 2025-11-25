@@ -42,7 +42,7 @@ const Restaurant = () => {
     if (id) {
       dispatch(getRestaurantById(id));
       dispatch(getRestaurantsCategory(id));
-      dispatch(getAllMenuItems({ merchantId: id }));
+      dispatch(getAllMenuItems({ merchantId: id, isActive: true }));
     }
   }, [id, dispatch]);
 

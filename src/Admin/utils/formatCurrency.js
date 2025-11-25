@@ -1,1 +1,1 @@
-export const formatCurrency = (amount) => amount.toLocaleString("vi-VN") + "₫";
+export const formatCurrency = (amount) => amount?.toLocaleString("vi-VN") + "₫";

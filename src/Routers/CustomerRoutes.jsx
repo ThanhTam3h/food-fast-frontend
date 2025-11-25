@@ -19,13 +19,18 @@ import ProductDetail from "../customers/pages/Product-detail/Product-detail";
 import Profile from "../customers/pages/Profile/Profile";
 import Restaurant from "../customers/pages/Restaurant/Restaurant";
 import TrackingOrder from "../customers/pages/TrackingOrder/TrackingOrder";
+import { useCheckRouter } from "../customers/util/checkRouter";
 
 const CustomerRoutes = () => {
+  const hide = useCheckRouter("auth");
   return (
     <div className="relative bg-white">
-      <nav className="sticky top-0 z-50">
-        <Navbar />
-      </nav>
+      {!hide && (
+        <nav className="sticky top-0 z-50">
+          <Navbar />
+        </nav>
+      )}
+
       <Routes>
         <Route exact path="/" element={<HomePage />} />
         <Route exact path="/account/register" element={<HomePage />} />
@@ -33,7 +38,11 @@ const CustomerRoutes = () => {
         <Route exact path="/register" element={<RegistrationForm />} />
         <Route exact path="/verify" element={<Verify />} />
         <Route exact path="/partner" element={<Partner />} />
-        <Route exact path="/register-merchant" element={<CreateMerchantForm />} />
+        <Route
+          exact
+          path="/register-merchant"
+          element={<CreateMerchantForm />}
+        />
         <Route exact path="/orders" element={<Orders />} />
         <Route
           exact

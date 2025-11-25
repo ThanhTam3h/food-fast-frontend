@@ -1,23 +1,28 @@
+// src/components/Order/OrderCard.jsx
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PendingIcon from "@mui/icons-material/Pending";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import StarIcon from "@mui/icons-material/Star";
-import StorefrontIcon from "@mui/icons-material/Storefront";
-import { formatCurrency } from "../../util/formartCurrency";
+import { MapPin, ShoppingBag, Star, Store } from "lucide-react";
 
 const formatDate = (timestamp) => {
   if (!timestamp) return "N/A";
   const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-  return date.toLocaleTimeString("vi-VN", {
-    hour: "2-digit",
-    minute: "2-digit",
+  return date.toLocaleString("vi-VN", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
+};
+
+const formatCurrency = (value) => {
+  if (isNaN(value)) return "0₫";
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(value);
 };
 
 const OrderCard = ({ order, onViewDetails }) => {
@@ -26,129 +31,123 @@ const OrderCard = ({ order, onViewDetails }) => {
       color: "text-yellow-600",
       icon: PendingIcon,
       bg: "bg-yellow-100",
+      label: "Chờ xác nhận",
     },
     CONFIRMED: {
-      color: "text-yellow-600",
-      icon: PendingIcon,
-      bg: "bg-yellow-100",
-    },
-    PREPARING: {
       color: "text-blue-600",
       icon: AccessTimeIcon,
       bg: "bg-blue-100",
+      label: "Đã xác nhận",
     },
     DELIVERING: {
-      color: "text-blue-600",
+      color: "text-purple-600",
       icon: AccessTimeIcon,
-      bg: "bg-blue-100",
+      bg: "bg-purple-100",
+      label: "Đang giao",
     },
     DELIVERED: {
       color: "text-green-600",
       icon: CheckCircleIcon,
       bg: "bg-green-100",
+      label: "Đã giao",
     },
-    CANCELLED: { color: "text-red-600", icon: CancelIcon, bg: "bg-red-100" },
+    CANCELLED: {
+      color: "text-red-600",
+      icon: CancelIcon,
+      bg: "bg-red-100",
+      label: "Đã hủy",
+    },
   };
 
   const statusInfo = statusClasses[order.status] || statusClasses.PENDING;
   const StatusIcon = statusInfo.icon;
 
-  // Tính tổng số lượng item
-  const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = order?.orderItems
+    ? order?.orderItems?.reduce((sum, item) => sum + item.quantity, 0)
+    : order?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 mb-6 transition-all duration-300 hover:shadow-xl hover:border-green-200">
-      {/* Header: Mã đơn & Trạng thái */}
-      <div className="flex justify-between items-center border-b pb-3 mb-3 border-dashed border-gray-200">
-        <div className="flex items-center space-x-2">
-          <ShoppingBagIcon
-            className="text-gray-500"
-            sx={{ fontSize: "1.5rem" }}
-          />
-          <h3 className="text-base font-semibold text-gray-700">
-            Đơn hàng:{" "}
-            <span className="text-gray-900 font-bold">
-              {order.id.substring(0, 8).toUpperCase()}
-            </span>
-          </h3>
-        </div>
-
-        {/* Status Badge */}
-        <div
-          className={`flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-bold ${statusInfo.color} ${statusInfo.bg}`}
-        >
-          <StatusIcon sx={{ fontSize: "1rem" }} />
-          <span>
-            {order.status === "PENDING"
-              ? "Đang chờ"
-              : order.status === "PROCESSING"
-              ? "Đang xử lý"
-              : order.status === "DELIVERED"
-              ? "Đã giao"
-              : "Đã hủy"}
-          </span>
-        </div>
-      </div>
-
-      {/* Thông tin Nhà hàng và Thời gian */}
-      <div className="space-y-3 mb-4">
-        <div className="flex items-start space-x-3">
-          <StorefrontIcon
-            className="text-green-600 flex-shrink-0"
-            sx={{ fontSize: "1.5rem" }}
-          />
-          <div>
-            <p className="text-base font-bold text-gray-900">
-              {order.restaurantName}
-            </p>
-            <p className="text-sm text-gray-500 flex items-center mt-1">
-              <StarIcon
-                sx={{ fontSize: "0.9rem", color: "#fbc531", mr: 0.5 }}
-              />
-              <span>{order.rating}</span>
-            </p>
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all hover:shadow-2xl hover:border-green-300">
+      <div className="p-5">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="w-6 h-6 text-green-600" />
+            <h3 className="font-bold text-lg text-gray-800">
+              Đơn hàng:{" "}
+              <span className="text-green-600">
+                {order?.orderNumber?.slice(-10)}
+              </span>
+            </h3>
           </div>
-        </div>
-        <div className="flex items-start space-x-3">
-          <LocationOnIcon
-            className="text-pink-600 flex-shrink-0"
-            sx={{ fontSize: "1.5rem" }}
-          />
-          <p className="text-sm text-gray-600">{order.deliveryAddress}</p>
-        </div>
-      </div>
-
-      {/* Danh sách món ăn */}
-      <div className="space-y-2 py-3 border-t border-b border-gray-100">
-        {order.items.map((item, index) => (
           <div
-            key={index}
-            className="flex justify-between text-sm text-gray-700"
+            className={`flex items-center gap-2 px-4 py-2 rounded-full ${statusInfo.bg} ${statusInfo.color} font-bold text-sm`}
           >
-            <span className="truncate pr-2">
-              {item.quantity} x {item.name}
-            </span>
-            <span className="font-medium">{formatCurrency(item.price)}</span>
+            <StatusIcon className="w-5 h-5" />
+            <span>{statusInfo.label}</span>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Footer: Tổng tiền và Chi tiết */}
-      <div className="mt-3">
-        <div className="flex justify-between items-center text-base font-extrabold text-gray-900">
-          <span>Tổng cộng ({totalItems} món):</span>
-          <span className="text-green-600 text-xl">
-            {formatCurrency(order.totalAmount)}
+        {/* Nhà hàng */}
+        <div className="flex items-center gap-3 mb-4">
+          <Store className="w-6 h-6 text-green-600" />
+          <div>
+            <p className="font-bold text-gray-900">
+              {order?.merchant?.name || order?.restaurantName}
+            </p>
+          </div>
+        </div>
+
+        {/* Địa chỉ giao */}
+        <div className="flex items-start gap-3 mb-4">
+          <MapPin className="w-6 h-6 text-pink-600 mt-0.5" />
+          <p className="text-sm text-gray-600 line-clamp-2">
+            {order.address?.street || order.deliveryAddress}
+          </p>
+        </div>
+
+        {/* Danh sách món */}
+        <div className="bg-gray-50 rounded-xl p-4 mb-4">
+          {order.orderItems?.slice(0, 2).map((item, i) => (
+            <div
+              key={i}
+              className="flex justify-between text-sm text-gray-700 mb-2 last:mb-0"
+            >
+              <span>
+                {item.quantity}x {item.product?.name || item.name}
+              </span>
+              <span className="font-medium">
+                {formatCurrency(item.product?.basePrice || item.price)}
+              </span>
+            </div>
+          ))}
+          {order.orderItems?.length > 2 && (
+            <p className="text-sm text-gray-500 text-center">
+              ... và {order.orderItems.length - 2} món khác
+            </p>
+          )}
+        </div>
+
+        {/* Tổng tiền + Nút xem chi tiết */}
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-lg font-bold text-gray-700">
+            Tổng cộng ({totalItems} món)
+          </span>
+          <span className="text-2xl font-bold text-green-600">
+            {formatCurrency(order.total || order.totalAmount)}
           </span>
         </div>
-        <div className="text-xs text-gray-500 mt-1">
-          Đặt lúc: {formatDate(order.orderDate)}
+
+        <div className="text-sm text-gray-500 mb-4">
+          Đặt lúc: {formatDate(order.createdAt || order.orderDate)}
         </div>
+
+        {/* Nút xem chi tiết */}
         <button
           onClick={() => onViewDetails(order)}
-          className="mt-3 w-full border border-green-500 text-green-500 font-semibold py-2 rounded-xl hover:bg-green-50 transition-colors"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition transform hover:scale-105 active:scale-95"
         >
-          Xem Chi Tiết Đơn Hàng
+          Xem Chi Tiết & Theo Dõi Drone
         </button>
       </div>
     </div>

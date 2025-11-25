@@ -26,8 +26,29 @@ const STATUS_LABEL = {
 export const OrdersPage = () => {
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state.restaurantsOrder);
-  const jwt = localStorage.getItem("jwt");
-  const merchantId = 1; // TODO: lấy từ auth context
+  const { merchant, jwt } = useSelector((state) => state.auth);
+  // console.log("merchant", merchant);
+  // const merchantId = merchant?.data?.id;
+
+  const merchantId = merchant?.id; // TODO: lấy từ auth context
+
+  // useEffect(() => {
+  //   const socket = io("http://localhost:3000", { transports: ["websocket"] });
+
+  //   // Join tất cả room merchant muốn theo dõi
+  //   orders.forEach((order) => {
+  //     socket.emit("joinOrder", { orderNumber: order.orderNumber });
+  //   });
+
+  //   socket.on("orderStatusUpdated", (payload) => {
+  //     // cập nhật Redux state
+  //     dispatch(
+  //       fetchRestaurantsOrder({ merchantId, status: payload.status, jwt })
+  //     );
+  //   });
+
+  //   return () => socket.disconnect();
+  // }, [orders]);
 
   useEffect(() => {
     const socket = io("http://localhost:3000", { transports: ["websocket"] });
@@ -37,11 +58,14 @@ export const OrdersPage = () => {
       socket.emit("joinOrder", { orderNumber: order.orderNumber });
     });
 
-    socket.on("orderStatusUpdated", (payload) => {
-      // cập nhật Redux state
-      dispatch(
-        fetchRestaurantsOrder({ merchantId, status: payload.status, jwt })
-      );
+    // Lắng nghe event từ backend
+    socket.on("order-status-update", (payload) => {
+      console.log("Received WS update:", payload);
+
+      // Reload orders realtime
+      if (payload.status && merchantId) {
+        dispatch(fetchRestaurantsOrder({ merchantId, status: activeTab, jwt }));
+      }
     });
 
     return () => socket.disconnect();
@@ -148,7 +172,7 @@ export const OrdersPage = () => {
           <h1 className="text-3xl font-bold text-gray-800">Quản Lý Đơn Hàng</h1>
           <p className="text-gray-600 mt-1">
             Tổng {orders.length} đơn{" "}
-            <span className="text-orange-600 font-bold">
+            <span className="text-green-600 font-bold">
               {orders.filter((o) => o.status === "PENDING").length} đơn mới
             </span>
           </p>

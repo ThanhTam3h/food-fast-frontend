@@ -39,11 +39,11 @@ export default function useOrderSocket(orderNumber, onStatusUpdate) {
     };
 
     socket.emit("joinOrder", { orderNumber });
-    socket.on("orderStatusUpdated", handlerRef.current);
+    socket.on("order-status-update", handlerRef.current);
 
     return () => {
       if (socket && handlerRef.current) {
-        socket.off("orderStatusUpdated", handlerRef.current);
+        socket.off("order-status-update", handlerRef.current);
       }
       // Không disconnect() ở đây → tránh lỗi StrictMode
     };

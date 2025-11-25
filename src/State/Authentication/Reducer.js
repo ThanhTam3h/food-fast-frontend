@@ -1,6 +1,9 @@
 import { isPresentInFavorites } from "../../config/logic";
+import { GET_MENU_ITEMS_FAILURE } from "../Customers/Menu/ActionType";
 import {
   ADD_TO_FAVORITES_SUCCESS,
+  GET_MERCHANT_REQUEST,
+  GET_MERCHANT_SUCCESS,
   GET_USER_FAILURE,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
@@ -25,12 +28,14 @@ const initialState = {
   isLoading: false,
   error: null,
   jwt: null,
+  merchant: null,
   favorites: [],
   success: null,
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case GET_MERCHANT_REQUEST:
     case REGISTER_REQUEST:
     case VERIFY_REQUEST:
     case LOGIN_REQUEST:
@@ -74,6 +79,13 @@ const authReducer = (state = initialState, action) => {
         success: "Login success",
       };
 
+    case GET_MERCHANT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        merchant: action.payload,
+      };
+    
     case GET_USER_SUCCESS:
       return {
         ...state,
@@ -89,6 +101,7 @@ const authReducer = (state = initialState, action) => {
         success: action.payload?.message,
       };
 
+    case GET_MENU_ITEMS_FAILURE:
     case REGISTER_FAILURE:
     case VERIFY_FAILURE:
     case LOGIN_FAILURE:

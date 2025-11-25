@@ -4,6 +4,9 @@ import {
   ADD_TO_FAVORITES_FAILURE,
   ADD_TO_FAVORITES_REQUEST,
   ADD_TO_FAVORITES_SUCCESS,
+  GET_MERCHANT_FAILURE,
+  GET_MERCHANT_REQUEST,
+  GET_MERCHANT_SUCCESS,
   GET_USER_FAILURE,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
@@ -69,8 +72,17 @@ export const loginUser = (reqData) => async (dispatch) => {
 
     const { data } = await axios.post(`${API_URL}/auth/login`, reqData.data);
     const jwt = data.data.accessToken;
+    console.log("LOGIN DATA:", data.data.user.role);
+    if (data.data.user.role == "merchant") {
+      reqData.navigate("/admin/restaurant");
+    }
+    else if (data.data.user.role == "admin") {
+      reqData.navigate("/super-admin");
+    } else {
+      reqData.navigate("/");
+    }
     if (jwt) localStorage.setItem("jwt", jwt);
-    reqData.navigate("/");
+
     dispatch({ type: LOGIN_SUCCESS, payload: data.data });
   } catch (error) {
     dispatch({
@@ -97,6 +109,25 @@ export const getUser = (reqData) => {
     } catch (error) {
       const errorMessage = error.message;
       dispatch({ type: GET_USER_FAILURE, payload: errorMessage });
+    }
+  };
+};
+
+export const getMerchant = (ownerId, jwt) => {
+  return async (dispatch) => {
+    dispatch({ type: GET_MERCHANT_REQUEST });
+    try {
+      const response = await api.get(`/merchants/${ownerId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      console.log("Merchant response: ", response);
+      const merchant = response.data.data;
+      dispatch({ type: GET_MERCHANT_SUCCESS, payload: merchant });
+    } catch (error) {
+      const errorMessage = error.message;
+      dispatch({ type: GET_MERCHANT_FAILURE, payload: errorMessage });
     }
   };
 };

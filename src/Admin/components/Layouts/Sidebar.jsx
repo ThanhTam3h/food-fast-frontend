@@ -9,7 +9,7 @@ const navItems = [
 export const Sidebar = ({ currentPage, onNavigate }) => (
   <div className="bg-white shadow-xl min-h-screen w-16 lg:w-64 fixed top-0 left-0 z-10 hidden md:block">
     <div className="p-4 h-20 border-b flex items-center justify-center lg:justify-start">
-      <span className="text-2xl font-bold text-orange-500">SF</span>
+      <span className="text-2xl font-bold text-green-500">SF</span>
     </div>
     <nav className="p-2">
       {navItems.map((item) => (
@@ -18,7 +18,7 @@ export const Sidebar = ({ currentPage, onNavigate }) => (
           onClick={() => onNavigate(item.page)}
           className={`w-full flex items-center space-x-3 p-3 my-1 rounded-lg transition-colors ${
             currentPage === item.page
-              ? "bg-orange-100 text-orange-600 font-semibold"
+              ? "bg-green-100 text-gray-600 font-semibold"
               : "text-gray-600 hover:bg-gray-100"
           }`}
         >

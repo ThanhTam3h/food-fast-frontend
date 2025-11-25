@@ -1,8 +1,8 @@
 const tabs = [
   { key: "PENDING", label: "Đơn Mới", color: "text-orange-600" },
-  { key: "CONFIRMED", label: "Đã xác nhận", color: "text-orange-600" },
-  { key: "PREPARING", label: "Đang chuẩn bị", color: "text-yellow-600" },
-  { key: "READY", label: "Sẵn Sàng", color: "text-blue-600" },
+  { key: "CONFIRMED", label: "Đã xác nhận", color: "text-blue-600" },
+  // { key: "PREPARING", label: "Đang chuẩn bị", color: "text-yellow-600" },
+  // { key: "READY", label: "Sẵn Sàng", color: "text-blue-600" },
   { key: "DELIVERING", label: "Đang giao hàng", color: "text-green-600" },
   { key: "DELIVERED", label: "Đã giao hàng", color: "text-green-600" },
   { key: "CANCELLED", label: "Đã Hủy", color: "text-red-600" },
@@ -26,7 +26,7 @@ export const OrderTabs = ({ activeTab, setActiveTab, orders }) => {
           onClick={() => setActiveTab(tab.key)}
           className={`px-4 py-2 text-sm font-semibold transition-all duration-200 flex items-center ${
             activeTab === tab.key
-              ? "border-b-2 border-orange-500 text-orange-600"
+              ? "border-b-2 border-green-500 text-green-600"
               : "text-gray-500 hover:text-gray-700"
           }`}
         >

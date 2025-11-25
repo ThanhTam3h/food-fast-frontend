@@ -17,12 +17,14 @@ import menuItemReducer from "../Customers/Menu/Reducer";
 import { orderReducer } from "../Customers/Orders/order.reducer";
 import restaurantReducer from "../Customers/Restaurant/Reducer";
 import superAdminReducer from "../SuperAdmin/superAdmin.reducer";
+import { menuReducer } from "../Admin/Menu/Reducer";
 
 // --- B1: gộp reducers
 const rootReducer = combineReducers({
   auth: authReducer,
   restaurant: restaurantReducer,
   menu: menuItemReducer,
+  menuMerchant: menuReducer,
   cart: cartReducer,
   order: orderReducer,
   restaurantsOrder: restaurantsOrderReducer,
@@ -51,3 +53,5 @@ export const store = legacy_createStore(
 
 // --- B6: tạo persistor
 export const persistor = persistStore(store);
+
+

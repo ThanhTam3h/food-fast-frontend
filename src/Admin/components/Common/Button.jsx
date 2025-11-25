@@ -6,8 +6,8 @@ export const Button = ({
 }) => {
   const base = "px-6 py-3 rounded-lg font-medium transition-colors shadow-md";
   const variants = {
-    primary: "bg-orange-500 text-white hover:bg-orange-600",
-    danger: "bg-red-500 text-white hover:bg-red-600",
+    primary: "bg-green-500 text-white hover:bg-green-600",
+    danger: "bg-green-500 text-white hover:bg-green-600",
     outline: "border border-red-500 text-red-500 hover:bg-red-50",
     secondary: "bg-blue-500 text-white hover:bg-blue-600",
   };

@@ -62,7 +62,11 @@ const Cart = () => {
   const isLoading = !cart;
 
   return (
-    <div className="flex justify-center min-w-screen mx-auto bg-white w-full min-h-screen flex flex-col font-sans shadow-xl">
+    <div
+      className={`flex justify-center mx-auto bg-white w-full flex-col font-sans shadow-xl ${
+        hide ? "h-auto" : "min-h-screen"
+      }`}
+    >
       {!hide && <CartHeader />}
 
       <main className="flex-grow p-4 overflow-y-auto">
@@ -116,7 +120,7 @@ const Cart = () => {
             )}
 
             {/* Danh sách món */}
-            {cart?.data?.items.map((item) => (
+            {cart?.data?.items?.map((item) => (
               <section key={item.id} className="mb-4">
                 <CartItemCard
                   item={item?.id}

@@ -66,7 +66,7 @@ export const getRestaurantById = (id) => {
   return async (dispatch) => {
     dispatch(getRestaurantByIdRequest());
     try {
-      const response = await api.get(`merchants/${id}`);
+      const response = await api.get(`merchants/merchant/${id}`);
       dispatch(getRestaurantByIdSuccess(response.data.data));
       console.log(response.data.data);
     } catch (error) {

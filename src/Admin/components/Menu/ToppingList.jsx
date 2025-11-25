@@ -2,24 +2,22 @@ import { Edit } from "lucide-react";
 
 export const ToppingList = ({ groups, onEdit }) => (
   <div className="bg-white shadow-xl rounded-xl overflow-hidden">
-    {groups.map((group) => (
+    {groups?.map((group) => (
       <div
         key={group.id}
         className="flex items-center p-4 border-b hover:bg-gray-50 text-gray-700"
       >
         <div className="flex-1">
-          <p className="font-medium">{group.name}</p>
-          <p className="text-xs text-gray-500">
-            {group.options.length} loại topping
-          </p>
+          <p className="font-medium">{group?.name}</p>
+          <p className="text-xs text-gray-500">{group?.length} loại topping</p>
         </div>
         <div className="w-32 text-center">
           <span
             className={`text-sm font-semibold ${
-              group.required ? "text-blue-600" : "text-green-600"
+              group.is_required ? "text-blue-600" : "text-green-600"
             }`}
           >
-            {group.required ? "Bắt buộc" : "Tùy chọn"}
+            {group.is_required ? "Bắt buộc" : "Tùy chọn"}
           </span>
         </div>
         <button

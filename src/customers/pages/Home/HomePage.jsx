@@ -111,7 +111,7 @@ const HomePage = () => {
 
   // Load menu, restaurant
   useEffect(() => {
-    dispatch(getAllMenuItems({ page: 1, limit: 6 }));
+    dispatch(getAllMenuItems({ page: 1, limit: 100 }));
   }, [dispatch]);
 
   return (
@@ -241,7 +241,7 @@ const HomePage = () => {
           Khám phá các món ăn nổi bật
         </Typography>
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {menuItems.map((item, i) => (
+          {menuItems?.map((item, i) => (
             <MenuItemCard key={i} data={item} />
           ))}
         </div>
