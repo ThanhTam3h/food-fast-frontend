@@ -3,60 +3,60 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 // BACKEND CHẠY Ở PORT 3000 → PHẢI KẾT NỐI TỚI 3000
-const SOCKET_URL = "http://localhost:3000"; 
+const SOCKET_URL = "https://backend-foodfast-production.up.railway.app/api/v1";
 
 let socket = null;
 
 export default function useOrderSocket(orderNumber, onStatusUpdate) {
-  const handlerRef = useRef();
+	const handlerRef = useRef();
 
-  useEffect(() => {
-    if (!orderNumber || !onStatusUpdate) return;
+	useEffect(() => {
+		if (!orderNumber || !onStatusUpdate) return;
 
-    // Tạo socket chỉ 1 lần
-    if (!socket || !socket.connected) {
-      socket = io(SOCKET_URL, {
-        transports: ["websocket"],
-        reconnection: true,
-        reconnectionAttempts: 10,
-        reconnectionDelay: 1000,
-        timeout: 20000,
-      });
+		// Tạo socket chỉ 1 lần
+		if (!socket || !socket.connected) {
+			socket = io(SOCKET_URL, {
+				transports: ["websocket"],
+				reconnection: true,
+				reconnectionAttempts: 10,
+				reconnectionDelay: 1000,
+				timeout: 20000,
+			});
 
-      socket.on("connect", () => {
-        console.log("Socket connected thành công:", socket.id);
-      });
+			socket.on("connect", () => {
+				console.log("Socket connected thành công:", socket.id);
+			});
 
-      socket.on("connect_error", (err) => {
-        console.warn("Socket lỗi kết nối:", err.message);
-      });
-    }
+			socket.on("connect_error", (err) => {
+				console.warn("Socket lỗi kết nối:", err.message);
+			});
+		}
 
-    handlerRef.current = (payload) => {
-      if (payload.orderNumber === orderNumber) {
-        onStatusUpdate(payload);
-      }
-    };
+		handlerRef.current = (payload) => {
+			if (payload.orderNumber === orderNumber) {
+				onStatusUpdate(payload);
+			}
+		};
 
-    socket.emit("joinOrder", { orderNumber });
-    socket.on("order-status-update", handlerRef.current);
+		socket.emit("joinOrder", { orderNumber });
+		socket.on("order-status-update", handlerRef.current);
 
-    return () => {
-      if (socket && handlerRef.current) {
-        socket.off("order-status-update", handlerRef.current);
-      }
-      // Không disconnect() ở đây → tránh lỗi StrictMode
-    };
-  }, [orderNumber, onStatusUpdate]);
+		return () => {
+			if (socket && handlerRef.current) {
+				socket.off("order-status-update", handlerRef.current);
+			}
+			// Không disconnect() ở đây → tránh lỗi StrictMode
+		};
+	}, [orderNumber, onStatusUpdate]);
 
-  // Chỉ disconnect khi người dùng thật sự rời app
-  useEffect(() => {
-    return () => {
-      if (socket) {
-        socket.disconnect();
-        socket = null;
-        console.log("Socket đã disconnect khi rời app");
-      }
-    };
-  }, []);
+	// Chỉ disconnect khi người dùng thật sự rời app
+	useEffect(() => {
+		return () => {
+			if (socket) {
+				socket.disconnect();
+				socket = null;
+				console.log("Socket đã disconnect khi rời app");
+			}
+		};
+	}, []);
 }
