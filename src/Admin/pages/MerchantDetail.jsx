@@ -25,7 +25,7 @@ import { useSelector } from "react-redux";
 
 // THAY ĐỔI DÒNG NÀY THEO BACKEND CỦA BẠN
 const API_URL =
-	"https://food-fast-backend-production.up.railway.app/api/v1/merchants/merchant";
+	"https://food-fast-backend.onrender.com/api/v1/merchants/merchant";
 // Ví dụ: https://api.foodapp.com/api/v1/merchants/merchant
 
 function StatusBadge({ status, isTemporarilyClosed }) {

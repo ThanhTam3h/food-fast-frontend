@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 // BACKEND CHẠY Ở PORT 3000 → PHẢI KẾT NỐI TỚI 3000
-const SOCKET_URL = "https://food-fast-backend-production.up.railway.app";
+const SOCKET_URL = "https://food-fast-backend.onrender.com";
 
 let socket = null;
 

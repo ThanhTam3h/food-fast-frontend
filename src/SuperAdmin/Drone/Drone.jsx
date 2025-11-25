@@ -10,10 +10,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 // ==================== API CONFIG ====================
-const DRONE_API =
-	"https://food-fast-backend-production.up.railway.app/api/v1/drone";
-const HUB_API =
-	"https://food-fast-backend-production.up.railway.app/api/v1/drone-hubs"; // API hub thật
+const DRONE_API = "https://food-fast-backend.onrender.com/api/v1/drone";
+const HUB_API = "https://food-fast-backend.onrender.com/api/v1/drone-hubs"; // API hub thật
 
 // ==================== STATUS CONFIG ====================
 const statusLabels = {

@@ -152,7 +152,7 @@ const statusMap = {
 	LANDING_AT_HUB: "Nhiệm vụ hoàn tất – Hẹn gặp lại!",
 };
 
-const socket = io("https://food-fast-backend-production.up.railway.app", {
+const socket = io("https://food-fast-backend.onrender.com", {
 	transports: ["websocket"],
 	reconnection: true,
 	reconnectionAttempts: 5,

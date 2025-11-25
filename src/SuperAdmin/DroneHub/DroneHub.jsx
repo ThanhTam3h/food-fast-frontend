@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 import AddressPartner from "../../customers/components/Address/AddressPartner";
 
 // ==================== API ====================
-const API_URL = "https://food-fast-backend-production.up.railway.app/api/v1";
+const API_URL = "https://food-fast-backend.onrender.com/api/v1";
 
 const api = {
   getHubs: async () => {

@@ -135,7 +135,7 @@ const CreateMerchantForm = () => {
 			});
 
 			const res = await axios.post(
-				"https://food-fast-backend-production.up.railway.app/api/v1/merchants",
+				"https://food-fast-backend.onrender.com/api/v1/merchants",
 				formData,
 				{ headers: { "Content-Type": "multipart/form-data" } }
 			);

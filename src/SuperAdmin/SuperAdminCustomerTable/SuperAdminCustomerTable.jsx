@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 // ──────────────────────────────────────────────
 // ĐỔI URL NÀY THÀNH BACKEND CỦA BẠN
 // ──────────────────────────────────────────────
-const API_BASE = "https://food-fast-backend-production.up.railway.app/api/v1"; // ← SỬA NẾU CẦN
+const API_BASE = "https://food-fast-backend.onrender.com/api/v1"; // ← SỬA NẾU CẦN
 
 // ==================== SHADCN/UI STUBS ====================
 const Button = ({

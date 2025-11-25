@@ -51,7 +51,7 @@ export const OrdersPage = () => {
 	// }, [orders]);
 
 	useEffect(() => {
-		const socket = io("https://food-fast-backend-production.up.railway.app", {
+		const socket = io("https://food-fast-backend.onrender.com", {
 			transports: ["websocket"],
 		});
 

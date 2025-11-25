@@ -34,7 +34,7 @@ const statusMap = {
 	},
 };
 
-const socket = io("https://food-fast-backend-production.up.railway.app", {
+const socket = io("https://food-fast-backend.onrender.com", {
 	transports: ["websocket"],
 	reconnection: true,
 	reconnectionAttempts: 5,
