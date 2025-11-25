@@ -51,7 +51,7 @@ export const OrdersPage = () => {
 	// }, [orders]);
 
 	useEffect(() => {
-		const socket = io("https://food-fast-frontend.vercel.app", {
+		const socket = io("https://food-fast-backend-production.up.railway.app", {
 			transports: ["websocket"],
 		});
 
