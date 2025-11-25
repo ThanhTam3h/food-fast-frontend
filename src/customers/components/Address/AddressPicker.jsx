@@ -10,8 +10,8 @@ export default function AddressPicker({
 	const GOONG_MAP_KEY = process.env.REACT_APP_GOONG_MAP_KEY;
 	const GOONG_RS_KEY = process.env.REACT_APP_GOONG_RS_KEY;
 
-	const lngRestaurant = restaurant?.address?.location?.coordinates[0];
-	const latRestaurant = restaurant?.address?.location?.coordinates[1];
+	const lngRestaurant = restaurant?.address?.location?.coordinates?.[0];
+	const latRestaurant = restaurant?.address?.location?.coordinates?.[1];
 
 	const mapContainer = useRef(null);
 	const mapRef = useRef(null);
