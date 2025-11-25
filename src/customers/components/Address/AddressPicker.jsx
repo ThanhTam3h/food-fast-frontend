@@ -136,11 +136,6 @@ export default function AddressPicker({
 	// ===================== PLACE CUSTOMER MARKER =====================
 	const placeCustomerMarker = async (lngVal, latVal) => {
 		const map = mapRef.current;
-		if (!map) {
-			console.warn("Map not initialized, skipping marker placement.");
-			return;
-		}
-
 		if (customerMarker) customerMarker.remove();
 
 		const newMarker = new goongjs.Marker({ color: "blue", draggable: true })
